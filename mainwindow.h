@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<QStringList>
+#include<QAction>
 
 namespace Ui {
 class MainWindow;
@@ -17,9 +19,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QStringList despSensWords;
+
 
 private slots:
     void checkDescription();
+    void changeOptions();
 };
 
 #endif // MAINWINDOW_H
