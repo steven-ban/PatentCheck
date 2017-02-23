@@ -12,8 +12,13 @@ TARGET = PatentCheck
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += \
+    mainwindow.cpp \
+    main.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    mainwindow.h
+
+FORMS += \
+    mainwindow.ui
 
