@@ -1,7 +1,8 @@
-#ifndef DIALOG_H
+﻿#ifndef DIALOG_H
 #define DIALOG_H
 
 #include <QDialog>
+#include<QListWidgetItem>
 
 namespace Ui {
 class Dialog;
@@ -18,9 +19,12 @@ public:
 private:
     Ui::Dialog *ui;
     QStringList despSensWords;
+    QString curSensWord;
+    int curSensWordIndex;
 
 private slots:
     void addSensWord();
+    void selectSensWord(QListWidgetItem*);
     void deleteSensWord();
 };
 
