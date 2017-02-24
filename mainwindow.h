@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include<QStringList>
 #include<QAction>
+#include<QMap>
+#include<QVariant>
 
 namespace Ui {
 class MainWindow;
@@ -20,11 +22,13 @@ public:
 private:
     Ui::MainWindow *ui;
     QStringList despSensWords;
+    QMap<QString, QVariant> misspellingWords;
 
 
 private slots:
     void checkDescription();
-    void changeOptions();
+    void changeSensitiveWordsOptions();
+    void changeMisspellingOptions();
 };
 
 #endif // MAINWINDOW_H

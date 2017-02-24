@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "dialog.h"
 #include "ui_dialog.h"
+#include "dialog2.h"
+#include "ui_dialog2.h"
 
 #include<QSettings>
 #include<QtDebug>
@@ -13,15 +15,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->action_Options, SIGNAL(triggered()), this, SLOT(changeOptions()));
+    connect(ui->action_Options, SIGNAL(triggered()), this, SLOT(changeSensitiveWordsOptions()));
     connect(ui->checkButton, SIGNAL(clicked()), this, SLOT(checkDescription()));
+    connect(ui->action_Misspelling_Words, SIGNAL(triggered()), \
+            this, SLOT(changeMisspellingOptions()));
+
 
     QSettings settings("SIPO", "DescriptionCheck");
     this->despSensWords = settings.value("DespSensWords").toStringList();
+    QMap<QString, QVariant> misspellingsWord = settings.value("MisspellingWords").toMap();
 
 }
 
-void MainWindow::changeOptions(){
+void MainWindow::changeMisspellingOptions(){
+    Dialog2 dialog2(this);
+    dialog2.exec();
+}
+
+void MainWindow::changeSensitiveWordsOptions(){
     Dialog dialog(this);
     dialog.exec();
 

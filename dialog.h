@@ -22,6 +22,8 @@ private:
     QString curSensWord;
     int curSensWordIndex;
 
+
+
 private slots:
     void addSensWord();
     void selectSensWord(QListWidgetItem*);

@@ -71,6 +71,7 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="action_Options"/>
+    <addaction name="action_Misspelling_Words"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -85,7 +86,12 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Options">
    <property name="text">
-    <string>&amp;Options</string>
+    <string>&amp;Sensitive Words</string>
+   </property>
+  </action>
+  <action name="action_Misspelling_Words">
+   <property name="text">
+    <string>&amp;Misspelling Words</string>
    </property>
   </action>
  </widget>
