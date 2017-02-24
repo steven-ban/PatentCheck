@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QSettings settings("SIPO", "DescriptionCheck");
     this->despSensWords = settings.value("DespSensWords").toStringList();
-    QMap<QString, QVariant> misspellingsWord = settings.value("MisspellingWords").toMap();
+    this->misspellingWords = settings.value("MisspellingWords").toMap();
 
 }
 
@@ -48,8 +48,10 @@ void MainWindow::checkDescription(){
     QColor defaultColor = ui->textEdit->textBackgroundColor();
     ui->textEdit->setTextBackgroundColor(defaultColor);
 
-    QTextCharFormat fmt;
+    QTextCharFormat fmt, fmt2;  // sensitive words, misspellings words background
     fmt.setBackground(QBrush(QColor(255, 255, 0)));
+    fmt2.setBackground(QBrush(QColor(255, 160, 122)));
+    // sensitive words
     for(auto iter = this->despSensWords.constBegin(); \
         iter != this->despSensWords.constEnd();
         ++iter){
@@ -57,18 +59,19 @@ void MainWindow::checkDescription(){
         // qDebug()<<"text: "<<ui->textEdit->toPlainText();
 
         QTextCursor newCursor(ui->textEdit->document());
+        // parsing sensitive words
         while(!newCursor.isNull() && !newCursor.atEnd()){
             newCursor = ui->textEdit->document()->find(*iter, newCursor);
 
-            // find current paragraph
-            QTextCursor paraCursor = newCursor;
-            paraCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-            paraCursor.movePosition(QTextCursor::NextCharacter, \
-                                    QTextCursor::KeepAnchor, \
-                                    6);
-            QString curPara = paraCursor.selectedText();
-
             if(!newCursor.isNull()){
+                // find current paragraph
+                QTextCursor paraCursor = newCursor;
+                paraCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+                paraCursor.movePosition(QTextCursor::NextCharacter, \
+                                        QTextCursor::KeepAnchor, \
+                                        6);
+                QString curPara = paraCursor.selectedText();
+
                 qDebug()<<"position before move: "<<newCursor.position();
                 newCursor.movePosition(QTextCursor::NextCharacter,
                                        QTextCursor::KeepAnchor,
@@ -83,8 +86,43 @@ void MainWindow::checkDescription(){
                 ui->listWidget->addItem(log);
             }
         }
-
     }
+
+    // misspelling words
+    for(auto iter2 = this->misspellingWords.constBegin();\
+        iter2 != this->misspellingWords.constEnd();\
+        ++iter2){
+        QTextCursor newCursor(ui->textEdit->document());
+        while(!newCursor.isNull() && !newCursor.atEnd()){
+            newCursor = ui->textEdit->document()->find(iter2.key(), newCursor);
+
+
+            if(!newCursor.isNull()){
+                QTextCursor paraCursor = newCursor;
+                paraCursor.movePosition(QTextCursor::StartOfBlock, \
+                                        QTextCursor::MoveAnchor);
+                paraCursor.movePosition(QTextCursor::NextCharacter, \
+                                        QTextCursor::KeepAnchor, \
+                                        6);
+                QString curPara = paraCursor.selectedText();
+
+                newCursor.movePosition(QTextCursor::NextCharacter, \
+                                       QTextCursor::KeepAnchor, \
+                                       iter2.key().length()/2);
+                newCursor.setCharFormat(fmt2);
+
+                QString log(iter2.key());
+                log.append(tr(" is a misspelling of "));
+                log.append(iter2.value().toString());
+                log.append(" in paragraph ");
+                log.append(curPara);
+                log.append(".");
+                ui->listWidget->addItem(log);
+
+            }
+        }
+    }
+
     ui->textEdit->update();
 
 }
