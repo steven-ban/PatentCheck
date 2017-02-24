@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(changeMisspellingOptions()));
     connect(ui->actionSubtitles, SIGNAL(triggered()), \
             this, SLOT(changeSubtitlesOptions()));
+    connect(ui->parseFiguresButton, SIGNAL(clicked()), \
+            this, SLOT(parseFigures()));
 
 
 
@@ -30,6 +32,34 @@ MainWindow::MainWindow(QWidget *parent) :
     this->despSensWords = settings.value("DespSensWords").toStringList();
     this->misspellingWords = settings.value("MisspellingWords").toMap();
     this->subtitles = settings.value("Subtitles").toStringList();
+}
+
+void MainWindow::parseFigures(){
+    QString rawText = ui->textEdit->toPlainText();
+    qDebug()<<"text length: "<<rawText.length();
+    if(rawText.isEmpty()){
+        return;
+    }
+    QTextCharFormat fmt4;
+    fmt4.setBackground(QBrush(QColor(255, 102, 153)));
+    QTextCursor cursor4(ui->textEdit->document());
+    while(!cursor4.isNull() && !cursor4.atEnd()){
+        qDebug()<<"current position: "<<cursor4.position();
+        cursor4 = ui->textEdit->document()->find(\
+                                /* QRegularExpression("图\\d{1,2}\\({0,1}\\w{0,2}\\){0,1}"), \ */
+                                QRegularExpression(QString::fromLatin1("\u56fe\\d{1,2}")),
+                                /*QRegularExpression("\\[\\d{4}\\]"), */
+                                cursor4);
+        if(!cursor4.isNull()){
+            cursor4.movePosition(QTextCursor::NextCharacter, \
+                                 QTextCursor::KeepAnchor, \
+                                 4);
+            cursor4.setCharFormat(fmt4);
+            qDebug()<<cursor4.selectedText();
+            this->figureSet.insert(cursor4.selectedText());
+        }
+    }
+
 }
 
 void MainWindow::changeSubtitlesOptions(){

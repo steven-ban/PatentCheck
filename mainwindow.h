@@ -6,6 +6,7 @@
 #include<QAction>
 #include<QMap>
 #include<QVariant>
+#include<QSet>
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,7 @@ private:
     QStringList despSensWords;
     QMap<QString, QVariant> misspellingWords;
     QStringList subtitles;
+    QSet<QString> figureSet;
 
 
 private slots:
@@ -31,6 +33,7 @@ private slots:
     void changeSensitiveWordsOptions();
     void changeMisspellingOptions();
     void changeSubtitlesOptions();
+    void parseFigures();
 };
 
 #endif // MAINWINDOW_H

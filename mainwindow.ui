@@ -34,6 +34,13 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="parseFiguresButton">
+        <property name="text">
+         <string>Parse Figures</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="checkButton">
         <property name="text">
          <string>&amp;Check</string>
