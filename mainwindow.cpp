@@ -48,6 +48,15 @@ void MainWindow::checkDescription(){
         QTextCursor newCursor(ui->textEdit->document());
         while(!newCursor.isNull() && !newCursor.atEnd()){
             newCursor = ui->textEdit->document()->find(*iter, newCursor);
+
+            // find current paragraph
+            QTextCursor paraCursor = newCursor;
+            paraCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            paraCursor.movePosition(QTextCursor::NextCharacter, \
+                                    QTextCursor::KeepAnchor, \
+                                    6);
+            QString curPara = paraCursor.selectedText();
+
             if(!newCursor.isNull()){
                 qDebug()<<"position before move: "<<newCursor.position();
                 newCursor.movePosition(QTextCursor::NextCharacter,
@@ -58,7 +67,8 @@ void MainWindow::checkDescription(){
                 newCursor.setCharFormat(fmt);
                 qDebug()<<"position after move: "<<newCursor.position();
                 QString log(*iter);
-                log.append(tr("appears in paragraph..."));
+                log.append(tr("appears in paragraph "));
+                log.append(curPara);
                 ui->listWidget->addItem(log);
             }
         }
