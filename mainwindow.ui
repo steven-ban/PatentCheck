@@ -72,6 +72,7 @@
     </property>
     <addaction name="action_Options"/>
     <addaction name="action_Misspelling_Words"/>
+    <addaction name="actionSubtitles"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -92,6 +93,11 @@
   <action name="action_Misspelling_Words">
    <property name="text">
     <string>&amp;Misspelling Words</string>
+   </property>
+  </action>
+  <action name="actionSubtitles">
+   <property name="text">
+    <string>Subtitles</string>
    </property>
   </action>
  </widget>

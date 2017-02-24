@@ -23,12 +23,14 @@ private:
     Ui::MainWindow *ui;
     QStringList despSensWords;
     QMap<QString, QVariant> misspellingWords;
+    QStringList subtitles;
 
 
 private slots:
     void checkDescription();
     void changeSensitiveWordsOptions();
     void changeMisspellingOptions();
+    void changeSubtitlesOptions();
 };
 
 #endif // MAINWINDOW_H

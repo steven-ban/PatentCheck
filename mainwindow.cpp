@@ -4,6 +4,8 @@
 #include "ui_dialog.h"
 #include "dialog2.h"
 #include "ui_dialog2.h"
+#include "dialog3.h"
+#include "ui_dialog3.h"
 
 #include<QSettings>
 #include<QtDebug>
@@ -19,11 +21,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkButton, SIGNAL(clicked()), this, SLOT(checkDescription()));
     connect(ui->action_Misspelling_Words, SIGNAL(triggered()), \
             this, SLOT(changeMisspellingOptions()));
+    connect(ui->actionSubtitles, SIGNAL(triggered()), \
+            this, SLOT(changeSubtitlesOptions()));
+
 
 
     QSettings settings("SIPO", "DescriptionCheck");
     this->despSensWords = settings.value("DespSensWords").toStringList();
     this->misspellingWords = settings.value("MisspellingWords").toMap();
+    this->subtitles = settings.value("Subtitles").toStringList();
+}
+
+void MainWindow::changeSubtitlesOptions(){
+    Dialog3 dialog3(this);
+    dialog3.exec();
 
 }
 
@@ -48,9 +59,10 @@ void MainWindow::checkDescription(){
     QColor defaultColor = ui->textEdit->textBackgroundColor();
     ui->textEdit->setTextBackgroundColor(defaultColor);
 
-    QTextCharFormat fmt, fmt2;  // sensitive words, misspellings words background
+    QTextCharFormat fmt, fmt2, fmt3;  // sensitive words, misspellings words background
     fmt.setBackground(QBrush(QColor(255, 255, 0)));
     fmt2.setBackground(QBrush(QColor(255, 160, 122)));
+    fmt3.setBackground(QBrush(QColor(0, 153, 51)));
     // sensitive words
     for(auto iter = this->despSensWords.constBegin(); \
         iter != this->despSensWords.constEnd();
@@ -124,6 +136,24 @@ void MainWindow::checkDescription(){
             }
         }
     }
+
+    // process subtitle check
+    for(auto iter3 = this->subtitles.constBegin(); \
+        iter3 != this->subtitles.constEnd(); \
+        ++iter3){
+        QTextCursor cursor3(ui->textEdit->document());
+        while(!cursor3.isNull() && !cursor3.atEnd()){
+            cursor3 = ui->textEdit->document()->find(*iter3, cursor3);
+            if(!cursor3.isNull()){
+                cursor3.movePosition(QTextCursor::NextCharacter, \
+                                     QTextCursor::KeepAnchor, \
+                                     (*iter3).length()/2);
+                cursor3.setCharFormat(fmt3);
+            }
+        }
+    }
+
+
 
     ui->textEdit->update();
 
