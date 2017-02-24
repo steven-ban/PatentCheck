@@ -55,14 +55,16 @@ void MainWindow::checkDescription(){
     for(auto iter = this->despSensWords.constBegin(); \
         iter != this->despSensWords.constEnd();
         ++iter){
-        // qDebug()<<"sensitive words: "<<*iter<<"\n";
+        qDebug()<<"sensitive words: "<<*iter;
         // qDebug()<<"text: "<<ui->textEdit->toPlainText();
 
         QTextCursor newCursor(ui->textEdit->document());
         // parsing sensitive words
+        qDebug()<<"cursor position: "<<newCursor.position();
         while(!newCursor.isNull() && !newCursor.atEnd()){
             newCursor = ui->textEdit->document()->find(*iter, newCursor);
 
+            qDebug()<<"newCursor is null? "<<newCursor.isNull();
             if(!newCursor.isNull()){
                 // find current paragraph
                 QTextCursor paraCursor = newCursor;
@@ -92,13 +94,13 @@ void MainWindow::checkDescription(){
     for(auto iter2 = this->misspellingWords.constBegin();\
         iter2 != this->misspellingWords.constEnd();\
         ++iter2){
-        QTextCursor newCursor(ui->textEdit->document());
-        while(!newCursor.isNull() && !newCursor.atEnd()){
-            newCursor = ui->textEdit->document()->find(iter2.key(), newCursor);
+        QTextCursor newCursor2(ui->textEdit->document());
+        while(!newCursor2.isNull() && !newCursor2.atEnd()){
+            newCursor2 = ui->textEdit->document()->find(iter2.key(), newCursor2);
 
 
-            if(!newCursor.isNull()){
-                QTextCursor paraCursor = newCursor;
+            if(!newCursor2.isNull()){
+                QTextCursor paraCursor = newCursor2;
                 paraCursor.movePosition(QTextCursor::StartOfBlock, \
                                         QTextCursor::MoveAnchor);
                 paraCursor.movePosition(QTextCursor::NextCharacter, \
@@ -106,10 +108,10 @@ void MainWindow::checkDescription(){
                                         6);
                 QString curPara = paraCursor.selectedText();
 
-                newCursor.movePosition(QTextCursor::NextCharacter, \
+                newCursor2.movePosition(QTextCursor::NextCharacter, \
                                        QTextCursor::KeepAnchor, \
                                        iter2.key().length()/2);
-                newCursor.setCharFormat(fmt2);
+                newCursor2.setCharFormat(fmt2);
 
                 QString log(iter2.key());
                 log.append(tr(" is a misspelling of "));
