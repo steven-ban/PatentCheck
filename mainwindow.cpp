@@ -33,6 +33,10 @@ void MainWindow::checkDescription(){
         return;
     }
 
+    ui->listWidget->clear();
+    QColor defaultColor = ui->textEdit->textBackgroundColor();
+    ui->textEdit->setTextBackgroundColor(defaultColor);
+
     QTextCharFormat fmt;
     fmt.setBackground(QBrush(QColor(255, 255, 0)));
     for(auto iter = this->despSensWords.constBegin(); \
@@ -45,11 +49,16 @@ void MainWindow::checkDescription(){
         while(!newCursor.isNull() && !newCursor.atEnd()){
             newCursor = ui->textEdit->document()->find(*iter, newCursor);
             if(!newCursor.isNull()){
-                newCursor.movePosition(QTextCursor::WordRight,
-                                       QTextCursor::KeepAnchor);
-                newCursor.mergeBlockCharFormat(fmt);
+                qDebug()<<"position before move: "<<newCursor.position();
+                newCursor.movePosition(QTextCursor::NextCharacter,
+                                       QTextCursor::KeepAnchor,
+                                       (*iter).length()/2);   // move position by character
+                qDebug()<<"sensitive word length: "<<(*iter).length();
+                qDebug()<<"selected text: "<<newCursor.selectedText();
+                newCursor.setCharFormat(fmt);
+                qDebug()<<"position after move: "<<newCursor.position();
                 QString log(*iter);
-                log.append("appears in paragraph...");
+                log.append(tr("appears in paragraph..."));
                 ui->listWidget->addItem(log);
             }
         }
