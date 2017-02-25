@@ -10,6 +10,7 @@
 #include<QSettings>
 #include<QtDebug>
 #include<QTextCharFormat>
+#include<QTextCodec>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,9 +46,20 @@ void MainWindow::parseFigures(){
     QTextCursor cursor4(ui->textEdit->document());
     while(!cursor4.isNull() && !cursor4.atEnd()){
         qDebug()<<"current position: "<<cursor4.position();
+
+        // regular expression
+        QString pattern("图");
+        QRegularExpression re(pattern);
+        // for debugging codecs
+        qDebug()<<"locale codec: "<<QTextCodec::codecForLocale()->name();
+        qDebug()<<"re is "<<re.pattern();
+        qDebug()<<QString("图").toLatin1()<<QString::fromLatin1("图").toLatin1()<<QString::fromUtf8("图").toLatin1();
+        ui->listWidget->addItem(pattern);
+        ui->listWidget->addItem(re.pattern());
         cursor4 = ui->textEdit->document()->find(\
+                                re, \
                                 /* QRegularExpression("图\\d{1,2}\\({0,1}\\w{0,2}\\){0,1}"), \ */
-                                QRegularExpression(QString::fromLatin1("\u56fe\\d{1,2}")),
+                                /* QRegularExpression(QString::fromLatin1("\u56fe\\d{1,2}")), */
                                 /*QRegularExpression("\\[\\d{4}\\]"), */
                                 cursor4);
         if(!cursor4.isNull()){
